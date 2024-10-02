@@ -14,6 +14,39 @@ public class obfImporter : MonoBehaviour
     int nbFacettes;
     int nbAretes;
 
+    void exportToObj(Vector3[] vertices, int[] triangles, Vector3[] normals)
+    {
+        
+
+        // Create a string array with the lines of text
+        string[] lines = { "First line", "Second line", "Third line" };
+
+        // Set a variable to the Documents path.
+        string docPath = "Assets/buddha.obj";
+
+        // Write the string array to a new file named "WriteLines.txt".
+        using (StreamWriter outputFile = new StreamWriter(docPath))
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                outputFile.WriteLine(("v " + vertices[i].x + " " + vertices[i].y + " " + vertices[i].z).Replace(",", "."));
+            }
+            outputFile.WriteLine();
+            for (int i = 0; i < normals.Length; i++)
+            {
+                outputFile.WriteLine(("vn " + normals[i].x + " " + normals[i].y + " " + normals[i].z).Replace(",", "."));
+            }
+            outputFile.WriteLine();
+            for (int i = 0; i < triangles.Length; i += 3)
+            {
+                outputFile.Write(("f " + (triangles[i] + 1) + "/" + (triangles[i] + 1)).Replace(",", "."));
+                outputFile.Write((" " + (triangles[i + 1] + 1) + "/" + (triangles[i + 1] + 1)).Replace(",", "."));
+                outputFile.WriteLine((" " + (triangles[i + 2] + 1) + "/" + (triangles[i + 2] + 1)).Replace(",", "."));
+            }
+        }
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -147,6 +180,9 @@ public class obfImporter : MonoBehaviour
         mesh.vertices = arrVertices;
         mesh.triangles = triangles.ToArray();
         mesh.normals = vertexNormal;
+
+        // Export obj
+        exportToObj(arrVertices, triangles.ToArray(), vertexNormal);
 
     }
 
